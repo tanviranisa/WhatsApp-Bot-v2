@@ -17,7 +17,7 @@ module.exports = {
     const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((uptime % (1000 * 60)) / 1000)
 
-    const status = `🐐 *GOAT Bot Status*
+    const status = `🐐 *MASTER Bot Status*
 
 🔗 *Connection:* ${global.GoatBot.isConnected ? "✅ Connected" : "❌ Disconnected"}
 ⏰ *Uptime:* ${hours}h ${minutes}m ${seconds}s
