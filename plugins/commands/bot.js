@@ -1,0 +1,105 @@
+const axios = require("axios");
+const selectionData = {};
+
+module.exports = {
+    config: {
+      name: "bot",
+      aliases: ["sim"],
+      description: "Engage in conversations with an AI-powered bot!",
+      author: "Code Whisperer",
+      cooldown: 5,
+      role: 0,
+      category: "AI Chat"
+    },
+
+  onEvent: async ({ event, api, body }) => {
+    const { threadId, senderId, replyMessage, message} = event;
+  
+    if (!selectionData[threadId]) return;
+    const { n, userId } = selectionData[threadId];
+    
+    if (userId !== senderId || !n) return;
+    
+    const quotedMessage =
+      n.message?.extendedTextMessage?.text || null;
+
+    if (!quotedMessage || replyMessage !== quotedMessage) return;
+    
+    try {
+        const apis = await axios.get('https://raw.githubusercontent.com/MOHAMMAD-NAYAN-07/Nayan/main/api.json');
+        const apiss = apis.data.api;
+      
+        const response = await axios.get(
+          `${apiss}/sim?type=ask&ask=${encodeURIComponent(body)}`
+        );
+
+        const replyText = response.data.data?.msg || "I'm not sure how to respond to that.";
+        
+        const botReply = await api.sendMessage(threadId, { text: replyText }, { quoted: message });
+        
+        selectionData[threadId] = {
+          userId: senderId,
+          n: botReply,
+        };
+    } catch (error) {
+      console.error("Error while contacting the API:", error);
+      await api.sendMessage(threadId, {
+        text: "An error occurred while processing your request. Please try again later.",
+      });
+    }
+  },
+
+  onCmd: async ({ event, api, args, reply }) => {
+    const usermsg = args.join(" ");
+    const { threadId, senderId, message} = event;
+    
+    if (!usermsg) {
+      const greetings = [
+        "আহ শুনা আমার তোমার অলিতে গলিতে উম্মাহ😇😘",
+        "কি গো সোনা আমাকে ডাকছ কেনো",
+        "বার বার আমাকে ডাকস কেন😡",
+        "আহ শোনা আমার আমাকে এতো ডাক্তাছো কেনো আসো বুকে আশো🥱",
+        "হুম জান তোমার অইখানে উম্মমাহ😷😘",
+        "আসসালামু আলাইকুম বলেন আপনার জন্য কি করতে পারি",
+        "আমাকে এতো না ডেকে বস নয়নকে একটা গফ দে 🙄",
+        "jang hanga korba",
+        "jang bal falaba🙂",
+      ];
+
+      const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+      const userToMention = senderId;
+
+      const greetingMessage = await api.sendMessage(threadId, {
+        text: `@${userToMention.split('@')[0]}, ${randomGreeting}`,
+        mentions: [userToMention],
+      }, { quoted: message });
+      
+      selectionData[threadId] = {
+        userId: senderId,
+        n: greetingMessage,
+      };
+      return;
+    }
+
+    try {
+        const apis = await axios.get('https://raw.githubusercontent.com/MOHAMMAD-NAYAN-07/Nayan/main/api.json');
+        const apiss = apis.data.api;
+      
+        const response = await axios.get(
+          `${apiss}/sim?type=ask&ask=${encodeURIComponent(usermsg)}`
+        );
+
+        const replyText = response.data.data?.msg || "I'm not sure how to respond to that.";
+        
+        const botReply = await api.sendMessage(threadId, { text: replyText }, { quoted: message });
+        
+        selectionData[threadId] = {
+          userId: senderId,
+          n: botReply,
+        };
+    } catch (error) {
+      console.error("Error while contacting the API:", error);
+      reply("An error occurred while processing your request. Please try again later.");
+    }
+  },
+};
