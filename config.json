@@ -1,8 +1,8 @@
 {
-  "botName": "GoatBot",
+  "botName": "MasterBot",
   "prefix": ".",
   "skipSync": true,
-  "admins": ["8801600000000@s.whatsapp.net"],
+  "admins": ["8801924705551@s.whatsapp.net"],
   "dashboard": {
     "enabled": true,
     "port": 3000,
