@@ -34,7 +34,7 @@ module.exports = {
       
       // Format statistics
       const statsInfo = `📊 *Bot Statistics*\n\n` +
-                       `🤖 *Bot Name:* ${global.GoatBot.user?.name || config.botName || "GoatBot"}\n` +
+                       `🤖 *Bot Name:* ${global.GoatBot.user?.name || config.botName || "MasterBot"}\n` +
                        `⏱️ *Uptime:* ${uptimeString}\n` +
                        `📱 *Status:* ${global.GoatBot.isConnected ? "🟢 Online" : "🔴 Offline"}\n\n` +
                        
